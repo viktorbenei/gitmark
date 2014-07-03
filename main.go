@@ -2,8 +2,10 @@ package main
 
 import (
 	"./commands"
+	"./config"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -22,11 +24,11 @@ func usage() {
 }
 
 func main() {
-	// configs := new(Configs)
-	// err := configs.readConfigFile()
-	// if err {
-	// 	log.Fatal(err)
-	// }
+	configs := new(config.Config)
+	err := configs.ReadConfigsFromFile()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	flag.Usage = usage
 	flag.Parse()
