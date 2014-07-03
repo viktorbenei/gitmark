@@ -24,11 +24,11 @@ func usage() {
 }
 
 func main() {
-	configs := new(config.Config)
-	err := configs.ReadConfigsFromFile()
+	err := config.ReadConfigFromFile()
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println("conf: ", config.GitmarkConfig)
 
 	flag.Usage = usage
 	flag.Parse()

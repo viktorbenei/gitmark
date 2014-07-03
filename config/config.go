@@ -1,28 +1,43 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 )
 
-type Config struct {
+type Repository struct {
+	Title string `json:"title"`
+	Path  string `json:"path"`
 }
 
-func (c *Config) tryToReadConfigFile(filepath string) error {
+type Config struct {
+	Repositories []Repository `json:"repositories"`
+}
+
+var GitmarkConfig Config
+
+func tryToReadConfigFile(filepath string) error {
 	file, err := os.Open(filepath)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
+	var config Config
+	jsonParser := json.NewDecoder(file)
+	if err = jsonParser.Decode(&config); err != nil {
+		return err
+	}
+	GitmarkConfig = config
+
 	return nil
 }
 
-func (c *Config) ReadConfigsFromFile() error {
+func ReadConfigFromFile() error {
 	tryConfigFile := func(filepath string) error {
-		err := c.tryToReadConfigFile(filepath)
-		if err != nil {
+		if err := tryToReadConfigFile(filepath); err != nil {
 			return err
 		}
 		fmt.Println(" (i) Using config file:", filepath)
@@ -33,10 +48,11 @@ func (c *Config) ReadConfigsFromFile() error {
 
 	for _, aConfFile := range configFilePathes {
 		if !configRead {
-			err := tryConfigFile(aConfFile)
-			if err == nil {
+			if err := tryConfigFile(aConfFile); err == nil {
 				configRead = true
 				return nil
+			} else {
+				fmt.Println(err)
 			}
 		}
 	}
