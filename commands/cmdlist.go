@@ -1,7 +1,8 @@
 package commands
 
 import (
-	"log"
+	"../config"
+	"fmt"
 )
 
 var cmdList = &Command{
@@ -12,5 +13,8 @@ var cmdList = &Command{
 }
 
 func runList(cmd *Command, args []string) {
-	log.Println("-> cmd list")
+	fmt.Println("Repositories:")
+	for idx, repo := range config.GitmarkConfig.Repositories {
+		fmt.Printf(" [%d] %s (%s)\n", idx, repo.Title, repo.Path)
+	}
 }

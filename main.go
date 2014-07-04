@@ -28,13 +28,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("conf: ", config.GitmarkConfig)
+	// fmt.Println("conf: ", config.GitmarkConfig)
 
 	flag.Usage = usage
 	flag.Parse()
 
 	args := flag.Args()
-	fmt.Println(args)
+	// fmt.Println(args)
 	if len(args) < 1 {
 		flag.Usage()
 		os.Exit(1)

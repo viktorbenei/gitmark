@@ -3,9 +3,12 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
+	"log"
 	"os"
 )
+
+// ---------------------
+// --- Models
 
 type Repository struct {
 	Title string `json:"title"`
@@ -17,6 +20,9 @@ type Config struct {
 }
 
 var GitmarkConfig Config
+
+// ---------------------
+// --- Functions
 
 func tryToReadConfigFile(filepath string) error {
 	file, err := os.Open(filepath)
@@ -40,7 +46,7 @@ func ReadConfigFromFile() error {
 		if err := tryToReadConfigFile(filepath); err != nil {
 			return err
 		}
-		fmt.Println(" (i) Using config file:", filepath)
+		log.Println(" (i) Using config file:", filepath)
 		return nil
 	}
 	configFilePathes := []string{".gitmarkrc.json", "~/.gitmarkrc.json"}
@@ -52,7 +58,7 @@ func ReadConfigFromFile() error {
 				configRead = true
 				return nil
 			} else {
-				fmt.Println(err)
+				log.Println(err)
 			}
 		}
 	}
