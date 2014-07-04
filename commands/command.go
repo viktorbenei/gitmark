@@ -9,7 +9,7 @@ import (
 type Command struct {
 	// Run runs the command.
 	// The args are the arguments after the command name.
-	Run func(cmd *Command, args []string)
+	Run func(cmd *Command, args []string) error
 
 	// Usage is the one-line usage message.
 	// The first word in the line is taken to be the command name.
@@ -34,6 +34,7 @@ func (c *Command) UsageExit() {
 	os.Exit(2)
 }
 
-var Commands = []*Command{
+var AvailableCommands = []*Command{
 	cmdList,
+	cmdCheck,
 }

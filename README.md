@@ -19,8 +19,11 @@ Gomake / gorelease
 - switch to master, tag, switch back to dev
 
 
-- read config file (JSON)
-- list: list them
+//- read config file (JSON)
+//- list: list them
+//- check: uncommited changes
+- scan: search for local git repo folders + option: save into gitmarkrc if not yet saved
+- goto: cd into the repo dir
 - check: git fetch on all, checks if pull/push
 - status: more detailed info of all
 
