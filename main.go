@@ -1,12 +1,13 @@
 package main
 
 import (
-	"./commands"
-	"./config"
 	"flag"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/viktorbenei/gitmark/commands"
+	"github.com/viktorbenei/gitmark/config"
 )
 
 var (

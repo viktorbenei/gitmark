@@ -20,6 +20,7 @@ type Config struct {
 }
 
 var GitmarkConfig Config
+var ConfigFileSearchPathes = []string{".gitmarkrc.json", "~/.gitmarkrc.json"}
 
 // ---------------------
 // --- Functions
@@ -49,10 +50,9 @@ func ReadConfigFromFile() error {
 		log.Println(" (i) Using config file:", filepath)
 		return nil
 	}
-	configFilePathes := []string{".gitmarkrc.json", "~/.gitmarkrc.json"}
 	configRead := false
 
-	for _, aConfFile := range configFilePathes {
+	for _, aConfFile := range ConfigFileSearchPathes {
 		if !configRead {
 			if err := tryConfigFile(aConfFile); err == nil {
 				configRead = true

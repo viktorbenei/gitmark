@@ -1,0 +1,12 @@
+{
+	"repositories": [
+		{
+			"title": "test/repo1",
+			"path": "/path/to/test1"
+		},
+		{
+			"title": "test/repo2",
+			"path": "/path/to/test2"
+		}
+	]
+}

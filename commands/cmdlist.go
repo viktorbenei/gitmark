@@ -1,8 +1,8 @@
 package commands
 
 import (
-	"../config"
 	"fmt"
+	"github.com/viktorbenei/gitmark/config"
 )
 
 var cmdList = &Command{
