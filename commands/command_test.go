@@ -30,4 +30,5 @@ func TestAvailableCommands(t *testing.T) {
 
 	checkIsCommandAvailable("list")
 	checkIsCommandAvailable("check")
+	checkIsCommandAvailable("scan")
 }

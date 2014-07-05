@@ -37,4 +37,5 @@ func (c *Command) UsageExit() {
 var AvailableCommands = []*Command{
 	cmdList,
 	cmdCheck,
+	cmdScan,
 }
