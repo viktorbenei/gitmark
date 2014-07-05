@@ -17,6 +17,7 @@ type Repository struct {
 
 type Config struct {
 	Repositories []Repository `json:"repositories"`
+	ScanIgnores  []string     `json:"scanignores"`
 }
 
 var GitmarkConfig Config

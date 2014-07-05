@@ -8,5 +8,9 @@
 			"title": "test/repo2",
 			"path": "/path/to/test2"
 		}
+	],
+	"scanignores": [
+		"/path/to/ignore1",
+		"/path/to/ignore2"
 	]
 }

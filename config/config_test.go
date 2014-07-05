@@ -7,7 +7,11 @@ import (
 func TestInitialState(t *testing.T) {
 	t.Log("Initial state checks")
 	if len(GitmarkConfig.Repositories) != 0 {
-		t.Error("Initial GitmarkConfig.Repositories length should be 0")
+		t.Error("Initial Repositories length should be 0")
+	}
+
+	if len(GitmarkConfig.ScanIgnores) != 0 {
+		t.Error("Initial ScanIgnores length should be 0")
 	}
 
 	// check search pathes
@@ -37,7 +41,11 @@ func TestAfterLoadState(t *testing.T) {
 
 	// now check it's loaded
 	if len(GitmarkConfig.Repositories) != 2 {
-		t.Error("GitmarkConfig.Repositories length should be 2")
+		t.Error("Repositories length should be 2")
+	}
+
+	if len(GitmarkConfig.ScanIgnores) != 2 {
+		t.Error("ScanIgnores length should be 2")
 	}
 
 	secondRepo := GitmarkConfig.Repositories[1]
