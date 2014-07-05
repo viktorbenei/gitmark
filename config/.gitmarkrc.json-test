@@ -10,7 +10,7 @@
 		}
 	],
 	"scanignores": [
-		"/path/to/ignore1",
-		"/path/to/ignore2"
+		"/path/to/*/ignore1",
+		"/path/to/*/ignore2"
 	]
 }

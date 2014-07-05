@@ -64,7 +64,7 @@ func runScan(cmd *Command, args []string) error {
 					}
 					if matchedIgnore {
 						if isScanVerbose {
-							fmt.Println(" -> ignore match:", path, "|", aScanIgnore)
+							fmt.Println(" (i) ignore match:", path, "|", aScanIgnore)
 						}
 						isPathIsMatch = false
 						break
