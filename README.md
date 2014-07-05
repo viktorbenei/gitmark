@@ -24,7 +24,7 @@ Gomake / gorelease
 //- check: uncommited changes
 - scan: search for local git repo folders + option: save into gitmarkrc if not yet saved
 - goto: cd into the repo dir
-- check: git fetch on all, checks if pull/push
+- check: git fetch on all, checks if pull/push (w flag)
 - status: more detailed info of all
 
 - cleanup of tags (leave only the last X)
