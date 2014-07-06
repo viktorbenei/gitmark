@@ -18,6 +18,7 @@ do
 done
 unset IFS
 
+echo "================================="
 if [ $is_test_failed -ne 0 ]; then
 	echo " [!] At least one of the tests failed!"
 	exit 1
