@@ -8,7 +8,9 @@ import (
 
 var (
 	testConfigFilePath = ".gitmarkrc.json-test"
+	repoTitle1         = "test/repo1"
 	repoPath1          = "/path/to/test1"
+	repoTitle2         = "test/repo2"
 	repoPath2          = "/path/to/test2"
 	newTestRepository  = Repository{Title: "new-test-repo", Path: "/path/to/new/test/repo"}
 )
@@ -132,6 +134,21 @@ func TestIsRepositoryPathStored(t *testing.T) {
 
 	if testConfig.IsRepositoryPathStored("/this/path/should/not/be/stored") {
 		t.Error("Repo path found - should NOT be")
+	}
+}
+
+func TestGetRepositoryByTitle(t *testing.T) {
+	t.Log("GetRepositoryByTitle should return the related Repository by Title, or an error if not found")
+	testConfig := CreateTestConfig()
+
+	repo, err := testConfig.GetRepositoryByTitle(repoTitle1)
+	if err != nil || repo.Title != repoTitle1 {
+		t.Error("Repo should be found")
+	}
+
+	repo, err = testConfig.GetRepositoryByTitle("this repo doesn't exist")
+	if err == nil {
+		t.Error("Repo should NOT be found - error should be returned")
 	}
 }
 

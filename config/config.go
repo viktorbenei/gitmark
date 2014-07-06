@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -22,7 +23,8 @@ type Config struct {
 	//
 	ConfigFilePath string `json:"-"`
 	// Lookup Maps
-	lookupRepositoryPaths map[string]bool `json:"-"`
+	lookupRepositoryPaths   map[string]bool       `json:"-"`
+	lookupRepositoryByTitle map[string]Repository `json:"-"`
 }
 
 var GitmarkConfig Config
@@ -31,12 +33,23 @@ var ConfigFileSearchPathes = []string{".gitmarkrc.json", "~/.gitmarkrc.json"}
 // ---------------------
 // --- Config Functions
 
-func (c *Config) generateLookupMaps() {
+func (c *Config) generateLookupMaps() error {
 	lookupRepoPaths := make(map[string]bool)
+	lookupRepositoryByTitle := make(map[string]Repository)
 	for _, aRepo := range c.Repositories {
+		if lookupRepoPaths[aRepo.Path] {
+			return errors.New(fmt.Sprintf("Repository path already found: %s", aRepo.Path))
+		}
 		lookupRepoPaths[aRepo.Path] = true
+		//
+		if _, ok := lookupRepositoryByTitle[aRepo.Title]; ok {
+			return errors.New(fmt.Sprintf("Repository title already found: %s", aRepo.Title))
+		}
+		lookupRepositoryByTitle[aRepo.Title] = aRepo
 	}
 	c.lookupRepositoryPaths = lookupRepoPaths
+	c.lookupRepositoryByTitle = lookupRepositoryByTitle
+	return nil
 }
 
 func (c *Config) IsRepositoryPathStored(repositoryPath string) bool {
@@ -50,6 +63,14 @@ func (c *Config) GetRepositoryPaths() []string {
 		repoPathes[idx] = aRepo.Path
 	}
 	return repoPathes
+}
+
+func (c *Config) GetRepositoryByTitle(repoTitle string) (Repository, error) {
+	repo, isFound := c.lookupRepositoryByTitle[repoTitle]
+	if !isFound {
+		return Repository{}, errors.New(fmt.Sprintf("Repository not found: %s", repoTitle))
+	}
+	return repo, nil
 }
 
 func (c *Config) AddRepository(repo Repository) {
