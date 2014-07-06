@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -132,5 +133,50 @@ func TestAddRepository(t *testing.T) {
 
 	if !testConfig.IsRepositoryPathStored(newTestRepository.Path) {
 		t.Error("Repo path not found!")
+	}
+}
+
+func TestWriteConfigToFile(t *testing.T) {
+	t.Log("If config file path is not defined it should fail to write the config to file")
+	testConfig := CreateTestConfig()
+
+	err := writeConfigToFile(testConfig)
+	if err == nil {
+		t.Error("An error should be returned")
+	}
+}
+
+func TestGenerateFormattedJSON(t *testing.T) {
+	t.Log("GenerateFormattedJSON")
+	testConfigJsonString := `{
+	"repositories": [
+		{
+			"title": "test/repo1",
+			"path": "/path/to/test1"
+		},
+		{
+			"title": "test/repo2",
+			"path": "/path/to/test2"
+		}
+	],
+	"scanignores": [
+		"/path/to/*/ignore1",
+		"/path/to/*/ignore2"
+	]
+}`
+	testConfig, err := readConfigFromReader(strings.NewReader(testConfigJsonString))
+	if err != nil {
+		t.Error("Failed to create the test Config")
+	}
+
+	jsonBytes, err := testConfig.GenerateFormattedJSON()
+	if err != nil {
+		t.Error("Failed to generate JSON:", err)
+	}
+	jsonString := fmt.Sprintf("%s", jsonBytes)
+	if jsonString != testConfigJsonString {
+		t.Log("Expected: ", testConfigJsonString)
+		t.Log("Given: ", jsonString)
+		t.Error("Generated JSON doesn't match")
 	}
 }

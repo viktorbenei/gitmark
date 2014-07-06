@@ -20,9 +20,9 @@ type Config struct {
 	Repositories []Repository `json:"repositories"`
 	ScanIgnores  []string     `json:"scanignores"`
 	//
-	ConfigFilePath string
+	ConfigFilePath string `json:"-"`
 	// Lookup Maps
-	lookupRepositoryPaths map[string]bool
+	lookupRepositoryPaths map[string]bool `json:"-"`
 }
 
 var GitmarkConfig Config
@@ -57,6 +57,14 @@ func (c *Config) AddRepository(repo Repository) {
 	c.generateLookupMaps()
 }
 
+func (c *Config) GenerateFormattedJSON() ([]byte, error) {
+	jsonContBytes, err := json.MarshalIndent(c, "", "\t")
+	if err != nil {
+		return []byte{}, err
+	}
+	return jsonContBytes, nil
+}
+
 // ---------------------
 // --- Functions
 
@@ -70,9 +78,29 @@ func readConfigFile(filepath string) (Config, error) {
 	return readConfigFromReader(file)
 }
 
-// func WriteConfigToFile() error {
+func writeConfigToFile(c Config) error {
+	if c.ConfigFilePath == "" {
+		return errors.New("No ConfigFilePath found")
+	}
 
-// }
+	file, err := os.Open(c.ConfigFilePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	jsonContBytes, err := c.GenerateFormattedJSON()
+	if err != nil {
+		return err
+	}
+
+	_, err = file.Write(jsonContBytes)
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
 
 func readConfigFromReader(reader io.Reader) (Config, error) {
 	var config Config
@@ -83,6 +111,14 @@ func readConfigFromReader(reader io.Reader) (Config, error) {
 	config.generateLookupMaps()
 
 	return config, nil
+}
+
+func WriteGitmarkConfigToFile() error {
+	err := writeConfigToFile(GitmarkConfig)
+	if err != nil {
+		log.Println(" [!] Failed to write the Config into file:", err)
+	}
+	return nil
 }
 
 func ReadGitmarkConfigFromFile() error {
