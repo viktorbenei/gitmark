@@ -83,7 +83,7 @@ func writeConfigToFile(c Config) error {
 		return errors.New("No ConfigFilePath found")
 	}
 
-	file, err := os.Open(c.ConfigFilePath)
+	file, err := os.Create(c.ConfigFilePath)
 	if err != nil {
 		return err
 	}
@@ -96,7 +96,7 @@ func writeConfigToFile(c Config) error {
 
 	_, err = file.Write(jsonContBytes)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return nil
@@ -117,6 +117,9 @@ func WriteGitmarkConfigToFile() error {
 	err := writeConfigToFile(GitmarkConfig)
 	if err != nil {
 		log.Println(" [!] Failed to write the Config into file:", err)
+		return err
+	} else {
+		log.Println(" (i) Written to file [OK]:", GitmarkConfig.ConfigFilePath)
 	}
 	return nil
 }

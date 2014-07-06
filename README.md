@@ -32,3 +32,5 @@ Gomake / gorelease
 
 - alias: in addition to the 'title', a shorter 'shortcut' ID
 - pull all branch: try to pull, every local branch
+
+- scan -prune : remove repos not found during the scan

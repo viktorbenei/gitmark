@@ -96,12 +96,21 @@ func runScan(cmd *Command, args []string) error {
 		return nil
 	})
 
-	if isScanVerbose {
-		formattedJsonBytes, err := config.GitmarkConfig.GenerateFormattedJSON()
-		if err != nil {
-			fmt.Println("Failed to generate JSON:", err)
+	if err == nil {
+		if isScanVerbose {
+			formattedJsonBytes, err := config.GitmarkConfig.GenerateFormattedJSON()
+			if err != nil {
+				fmt.Println("Failed to generate JSON:", err)
+			}
+			fmt.Printf("Config: %s\n", formattedJsonBytes)
 		}
-		fmt.Printf("Config: %s\n", formattedJsonBytes)
+
+		if isStore {
+			err = config.WriteGitmarkConfigToFile()
+			if err != nil {
+				fmt.Println(" [!] Failed to write Config into file")
+			}
+		}
 	}
 
 	return err
