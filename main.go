@@ -27,7 +27,7 @@ func usage() {
 }
 
 func main() {
-	err := config.ReadConfigFromFile()
+	err := config.ReadGitmarkConfigFromFile()
 	if err != nil {
 		log.Fatal(err)
 	}
