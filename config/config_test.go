@@ -53,3 +53,12 @@ func TestAfterLoadState(t *testing.T) {
 		t.Error("Repository value checking failed")
 	}
 }
+
+func TestGetRepositoryPaths(t *testing.T) {
+	t.Log("GetRepositoryPaths should return a slice of the repo pathes")
+
+	repoPathes := GitmarkConfig.GetRepositoryPaths()
+	if repoPathes[0] != "/path/to/test1" || repoPathes[1] != "/path/to/test2" {
+		t.Error("Repository pathes check failed")
+	}
+}

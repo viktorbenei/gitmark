@@ -43,6 +43,15 @@ func tryToReadConfigFile(filepath string) error {
 	return nil
 }
 
+func (c *Config) GetRepositoryPaths() []string {
+	repoCount := len(c.Repositories)
+	repoPathes := make([]string, repoCount, repoCount)
+	for idx, aRepo := range c.Repositories {
+		repoPathes[idx] = aRepo.Path
+	}
+	return repoPathes
+}
+
 func ReadConfigFromFile() error {
 	tryConfigFile := func(filepath string) error {
 		if err := tryToReadConfigFile(filepath); err != nil {
