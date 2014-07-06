@@ -12,3 +12,12 @@ func TestCmdCheckExistence(t *testing.T) {
 		t.Error("cmdCheck should be accessible and should be a *commands.Command - but it's a:", cmtTypeStr)
 	}
 }
+
+func Test_runCheck(t *testing.T) {
+	t.Log("should run")
+
+	err := runCheck(nil, nil)
+	if err != nil {
+		t.Error("should run without errors")
+	}
+}

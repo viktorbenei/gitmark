@@ -13,6 +13,21 @@ func TestCmdScanExistence(t *testing.T) {
 	}
 }
 
+func Test_runScan(t *testing.T) {
+	t.Log("should run if rootpath is provided")
+
+	err := runScan(nil, nil)
+	if err == nil {
+		t.Error("rootpath is required, should return an error!")
+	}
+
+	cmdScan.Flag.Parse([]string{"-rootpath", "."})
+	err = runScan(nil, nil)
+	if err != nil {
+		t.Error("error returned:", err)
+	}
+}
+
 func Test_generateRepositoryTitleForRepositoryPath(t *testing.T) {
 	t.Log("generateRepositoryTitleForRepositoryPath should generate a title by the path's directory name")
 
