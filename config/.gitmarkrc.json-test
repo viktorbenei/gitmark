@@ -1,4 +1,7 @@
 {
+	"preferences": {
+		"open-command": "open /Applications/Utilities/Terminal.app/Contents/MacOS/Terminal --args"
+		},
 	"repositories": [
 		{
 			"title": "test/repo1",

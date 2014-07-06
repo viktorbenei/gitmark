@@ -12,6 +12,10 @@ import (
 // ---------------------
 // --- Models
 
+type PrefStruct struct {
+	OpenCommand string `json:"open-command"`
+}
+
 type Repository struct {
 	Title string `json:"title"`
 	Path  string `json:"path"`
@@ -20,6 +24,7 @@ type Repository struct {
 type Config struct {
 	Repositories []Repository `json:"repositories"`
 	ScanIgnores  []string     `json:"scanignores"`
+	Preferences  PrefStruct   `json:"preferences"`
 	//
 	ConfigFilePath string `json:"-"`
 	// Lookup Maps

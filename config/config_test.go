@@ -197,7 +197,10 @@ func TestGenerateFormattedJSON(t *testing.T) {
 	"scanignores": [
 		"/path/to/*/ignore1",
 		"/path/to/*/ignore2"
-	]
+	],
+	"preferences": {
+		"open-command": ""
+	}
 }`
 	testConfig, err := readConfigFromReader(strings.NewReader(testConfigJsonString))
 	if err != nil {

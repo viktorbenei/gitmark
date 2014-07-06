@@ -54,4 +54,6 @@ func main() {
 			return
 		}
 	}
+
+	log.Fatal("Command not found: ", args[0])
 }

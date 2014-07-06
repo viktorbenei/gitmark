@@ -38,5 +38,5 @@ var AvailableCommands = []*Command{
 	cmdList,
 	cmdCheck,
 	cmdScan,
-	cmdGoto,
+	cmdOpen,
 }
