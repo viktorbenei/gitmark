@@ -94,6 +94,24 @@ func CreateTestConfig() Config {
 	return testConfig
 }
 
+func TestShouldNotFailForEmptyJSONConfigFile(t *testing.T) {
+	t.Log("Should not fail for 'empty' config json")
+
+	conf, err := readConfigFromReader(strings.NewReader("{}"))
+	if err != nil {
+		t.Error("Failed to create the test Config from {}")
+	}
+	if len(conf.Repositories) != 0 {
+		t.Error("Repositories count should be 0")
+	}
+
+	// BUT a truly empty content is not a valid JSON!
+	conf, err = readConfigFromReader(strings.NewReader(""))
+	if err == nil {
+		t.Error("Should return error if the content is not a valid json - an empty content is not a valid JSON!")
+	}
+}
+
 func TestGetRepositoryPaths(t *testing.T) {
 	t.Log("GetRepositoryPaths should return a slice of the repo pathes")
 	testConfig := CreateTestConfig()
