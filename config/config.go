@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"errors"
+	"io"
 	"log"
 	"os"
 )
@@ -18,6 +19,8 @@ type Repository struct {
 type Config struct {
 	Repositories []Repository `json:"repositories"`
 	ScanIgnores  []string     `json:"scanignores"`
+	//
+	ConfigFilePath string
 	// Lookup Maps
 	lookupRepositoryPaths map[string]bool
 }
@@ -26,25 +29,7 @@ var GitmarkConfig Config
 var ConfigFileSearchPathes = []string{".gitmarkrc.json", "~/.gitmarkrc.json"}
 
 // ---------------------
-// --- Functions
-
-func tryToReadConfigFile(filepath string) error {
-	file, err := os.Open(filepath)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	var config Config
-	jsonParser := json.NewDecoder(file)
-	if err = jsonParser.Decode(&config); err != nil {
-		return err
-	}
-	config.generateLookupMaps()
-	GitmarkConfig = config
-
-	return nil
-}
+// --- Config Functions
 
 func (c *Config) generateLookupMaps() {
 	lookupRepoPaths := make(map[string]bool)
@@ -67,12 +52,48 @@ func (c *Config) GetRepositoryPaths() []string {
 	return repoPathes
 }
 
-func ReadConfigFromFile() error {
+func (c *Config) AddRepository(repo Repository) {
+	c.Repositories = append(c.Repositories, repo)
+	c.generateLookupMaps()
+}
+
+// ---------------------
+// --- Functions
+
+func readConfigFile(filepath string) (Config, error) {
+	file, err := os.Open(filepath)
+	if err != nil {
+		return Config{}, err
+	}
+	defer file.Close()
+
+	return readConfigFromReader(file)
+}
+
+// func WriteConfigToFile() error {
+
+// }
+
+func readConfigFromReader(reader io.Reader) (Config, error) {
+	var config Config
+	jsonParser := json.NewDecoder(reader)
+	if err := jsonParser.Decode(&config); err != nil {
+		return Config{}, err
+	}
+	config.generateLookupMaps()
+
+	return config, nil
+}
+
+func ReadGitmarkConfigFromFile() error {
 	tryConfigFile := func(filepath string) error {
-		if err := tryToReadConfigFile(filepath); err != nil {
+		config, err := readConfigFile(filepath)
+		if err != nil {
 			return err
 		}
 		log.Println(" (i) Using config file:", filepath)
+		GitmarkConfig = config
+		GitmarkConfig.ConfigFilePath = filepath
 		return nil
 	}
 	configRead := false

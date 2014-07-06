@@ -1,12 +1,15 @@
 package config
 
 import (
+	"strings"
 	"testing"
 )
 
 var (
-	repoPath1 = "/path/to/test1"
-	repoPath2 = "/path/to/test2"
+	testConfigFilePath = ".gitmarkrc.json-test"
+	repoPath1          = "/path/to/test1"
+	repoPath2          = "/path/to/test2"
+	newTestRepository  = Repository{Title: "new-test-repo", Path: "/path/to/new/test/repo"}
 )
 
 func TestInitialState(t *testing.T) {
@@ -29,13 +32,13 @@ func TestLoadConfigFile(t *testing.T) {
 	t.Log("Should be able to load the local config file")
 
 	// prepend the config file search path with a test one
-	ConfigFileSearchPathes = append([]string{".gitmarkrc.json-test"}, ConfigFileSearchPathes...)
-	if ConfigFileSearchPathes[0] != ".gitmarkrc.json-test" {
+	ConfigFileSearchPathes = append([]string{testConfigFilePath}, ConfigFileSearchPathes...)
+	if ConfigFileSearchPathes[0] != testConfigFilePath {
 		t.Error("Failed to add the test Gitmarkrc to search path")
 	}
 
 	// load the config file
-	err := ReadConfigFromFile()
+	err := ReadGitmarkConfigFromFile()
 	if err != nil {
 		t.Error("Failed to load the config file")
 	}
@@ -43,6 +46,10 @@ func TestLoadConfigFile(t *testing.T) {
 
 func TestAfterLoadState(t *testing.T) {
 	t.Log("After load state checks")
+
+	if GitmarkConfig.ConfigFilePath != testConfigFilePath {
+		t.Error("The test config file should be the loaded one")
+	}
 
 	// now check it's loaded
 	if len(GitmarkConfig.Repositories) != 2 {
@@ -59,10 +66,38 @@ func TestAfterLoadState(t *testing.T) {
 	}
 }
 
+// --- the functions below will test a brand new loaded/mocked Config, not the GitmarkConig
+
+func CreateTestConfig() Config {
+	testConfigJsonContent := `
+		{
+		"repositories": [
+			{
+				"title": "test/repo1",
+				"path": "/path/to/test1"
+			},
+			{
+				"title": "test/repo2",
+				"path": "/path/to/test2"
+			}
+		],
+		"scanignores": [
+			"/path/to/*/ignore1",
+			"/path/to/*/ignore2"
+		]
+	}`
+	testConfig, err := readConfigFromReader(strings.NewReader(testConfigJsonContent))
+	if err != nil {
+		panic("Could not create the test config")
+	}
+	return testConfig
+}
+
 func TestGetRepositoryPaths(t *testing.T) {
 	t.Log("GetRepositoryPaths should return a slice of the repo pathes")
+	testConfig := CreateTestConfig()
 
-	repoPathes := GitmarkConfig.GetRepositoryPaths()
+	repoPathes := testConfig.GetRepositoryPaths()
 	if repoPathes[0] != repoPath1 || repoPathes[1] != repoPath2 {
 		t.Error("Repository pathes check failed")
 	}
@@ -70,12 +105,32 @@ func TestGetRepositoryPaths(t *testing.T) {
 
 func TestIsRepositoryPathStored(t *testing.T) {
 	t.Log("IsRepositoryPathStored should return true for stored pathes and false for not stored ones")
+	testConfig := CreateTestConfig()
 
-	if !GitmarkConfig.IsRepositoryPathStored(repoPath1) || !GitmarkConfig.IsRepositoryPathStored(repoPath2) {
+	if !testConfig.IsRepositoryPathStored(repoPath1) || !testConfig.IsRepositoryPathStored(repoPath2) {
 		t.Error("Repo path not found - should be")
 	}
 
-	if GitmarkConfig.IsRepositoryPathStored("/this/path/should/not/be/stored") {
+	if testConfig.IsRepositoryPathStored("/this/path/should/not/be/stored") {
 		t.Error("Repo path found - should NOT be")
+	}
+}
+
+func TestAddRepository(t *testing.T) {
+	t.Log("AddRepository should add the new repository")
+	testConfig := CreateTestConfig()
+
+	if len(testConfig.Repositories) != 2 {
+		t.Error("Repo count should be 2")
+	}
+
+	testConfig.AddRepository(newTestRepository)
+
+	if len(testConfig.Repositories) != 3 {
+		t.Error("Repo count should be 3")
+	}
+
+	if !testConfig.IsRepositoryPathStored(newTestRepository.Path) {
+		t.Error("Repo path not found!")
 	}
 }
