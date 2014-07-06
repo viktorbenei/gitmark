@@ -4,6 +4,11 @@ import (
 	"testing"
 )
 
+var (
+	repoPath1 = "/path/to/test1"
+	repoPath2 = "/path/to/test2"
+)
+
 func TestInitialState(t *testing.T) {
 	t.Log("Initial state checks")
 	if len(GitmarkConfig.Repositories) != 0 {
@@ -58,7 +63,19 @@ func TestGetRepositoryPaths(t *testing.T) {
 	t.Log("GetRepositoryPaths should return a slice of the repo pathes")
 
 	repoPathes := GitmarkConfig.GetRepositoryPaths()
-	if repoPathes[0] != "/path/to/test1" || repoPathes[1] != "/path/to/test2" {
+	if repoPathes[0] != repoPath1 || repoPathes[1] != repoPath2 {
 		t.Error("Repository pathes check failed")
+	}
+}
+
+func TestIsRepositoryPathStored(t *testing.T) {
+	t.Log("IsRepositoryPathStored should return true for stored pathes and false for not stored ones")
+
+	if !GitmarkConfig.IsRepositoryPathStored(repoPath1) || !GitmarkConfig.IsRepositoryPathStored(repoPath2) {
+		t.Error("Repo path not found - should be")
+	}
+
+	if GitmarkConfig.IsRepositoryPathStored("/this/path/should/not/be/stored") {
+		t.Error("Repo path found - should NOT be")
 	}
 }

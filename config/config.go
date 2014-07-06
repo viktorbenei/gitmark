@@ -18,6 +18,8 @@ type Repository struct {
 type Config struct {
 	Repositories []Repository `json:"repositories"`
 	ScanIgnores  []string     `json:"scanignores"`
+	// Lookup Maps
+	lookupRepositoryPaths map[string]bool
 }
 
 var GitmarkConfig Config
@@ -38,9 +40,22 @@ func tryToReadConfigFile(filepath string) error {
 	if err = jsonParser.Decode(&config); err != nil {
 		return err
 	}
+	config.generateLookupMaps()
 	GitmarkConfig = config
 
 	return nil
+}
+
+func (c *Config) generateLookupMaps() {
+	lookupRepoPaths := make(map[string]bool)
+	for _, aRepo := range c.Repositories {
+		lookupRepoPaths[aRepo.Path] = true
+	}
+	c.lookupRepositoryPaths = lookupRepoPaths
+}
+
+func (c *Config) IsRepositoryPathStored(repositoryPath string) bool {
+	return c.lookupRepositoryPaths[repositoryPath]
 }
 
 func (c *Config) GetRepositoryPaths() []string {
