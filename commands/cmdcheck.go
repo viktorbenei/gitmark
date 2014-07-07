@@ -30,10 +30,12 @@ func runCheck(cmd *Command, args []string) error {
 		} else {
 			if len(outp) > 0 {
 				fmt.Println("->", repo.Title)
+				fmt.Println("   path:", repo.Path)
 				fmt.Printf("%s", outp)
 				fmt.Println()
 			} else if isVerbose {
 				fmt.Println("->", repo.Title)
+				fmt.Println("   path:", repo.Path)
 				fmt.Println(" (i) Nothing to commit")
 				fmt.Println()
 			}

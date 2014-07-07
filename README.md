@@ -19,6 +19,7 @@ Gomake / gorelease
 - switch to master, tag, switch back to dev
 
 
+[BUGFIX] -> ~/.gitmarkrc is not ok, ~ is not expanded!
 //- read config file (JSON)
 //- list: list them
 //- check: uncommited changes
