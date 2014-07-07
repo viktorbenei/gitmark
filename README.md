@@ -24,7 +24,8 @@ Gomake / gorelease
 //- list: list them
 //- check: uncommited changes
 //- scan: search for local git repo folders + option: save into gitmarkrc if not yet saved
-- goto: cd into the repo dir
+//- open: open the repository with a specified command (os/exec)
+- add: w/ a step-by-step guide, input from user, similar to SourceTree
 - check: git fetch on all, checks if pull/push (w flag)
 - status: more detailed info of all
 
