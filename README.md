@@ -26,8 +26,10 @@ Gomake / gorelease
 //- scan: search for local git repo folders + option: save into gitmarkrc if not yet saved
 //- open: open the repository with a specified command (os/exec)
 - add: w/ a step-by-step guide, input from user, similar to SourceTree
+- add v2: 2 modes, 1) add local working copy 2) clone a repo
 - check: git fetch on all, checks if pull/push (w flag)
 - status: more detailed info of all
+- remove a gitmark, with option to remove the repository as well (delete folder)
 
 - cleanup of tags (leave only the last X)
 - get the next version-tag (increment the last one by one)
