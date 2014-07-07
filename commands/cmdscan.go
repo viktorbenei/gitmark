@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/viktorbenei/gitmark/config"
 	"os"
-	"path"
 	"path/filepath"
 	"regexp"
 )
@@ -31,7 +30,7 @@ func init() {
 }
 
 func generateRepositoryTitleForRepositoryPath(repoPath string) string {
-	parentDirName := path.Base(repoPath)
+	parentDirName := filepath.Base(repoPath)
 	return parentDirName
 }
 
@@ -78,7 +77,7 @@ func runScan(cmd *Command, args []string) error {
 				}
 			}
 			if isPathIsMatch {
-				repoPath := path.Dir(aPath)
+				repoPath := filepath.Dir(aPath)
 				fmt.Println(repoPath)
 				if config.GitmarkConfig.IsRepositoryPathStored(repoPath) {
 					if isScanVerbose {
