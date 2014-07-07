@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/viktorbenei/gitmark/pathutil"
 	"io"
 	"log"
 	"os"
@@ -43,12 +44,12 @@ func (c *Config) generateLookupMaps() error {
 	lookupRepositoryByTitle := make(map[string]Repository)
 	for _, aRepo := range c.Repositories {
 		if lookupRepoPaths[aRepo.Path] {
-			return errors.New(fmt.Sprintf("Repository path already found: %s", aRepo.Path))
+			return errors.New(fmt.Sprintf("Repository path already found in stored gitmarks: %s", aRepo.Path))
 		}
 		lookupRepoPaths[aRepo.Path] = true
 		//
 		if _, ok := lookupRepositoryByTitle[aRepo.Title]; ok {
-			return errors.New(fmt.Sprintf("Repository title already found: %s", aRepo.Title))
+			return errors.New(fmt.Sprintf("Repository title already found in stored gitmarks: %s", aRepo.Title))
 		}
 		lookupRepositoryByTitle[aRepo.Title] = aRepo
 	}
@@ -78,9 +79,9 @@ func (c *Config) GetRepositoryByTitle(repoTitle string) (Repository, error) {
 	return repo, nil
 }
 
-func (c *Config) AddRepository(repo Repository) {
+func (c *Config) AddRepository(repo Repository) error {
 	c.Repositories = append(c.Repositories, repo)
-	c.generateLookupMaps()
+	return c.generateLookupMaps()
 }
 
 func (c *Config) GenerateFormattedJSON() ([]byte, error) {
@@ -163,9 +164,10 @@ func ReadGitmarkConfigFromFile() error {
 	}
 	configRead := false
 
-	for _, aConfFile := range ConfigFileSearchPathes {
+	for _, aConfFilePath := range ConfigFileSearchPathes {
 		if !configRead {
-			if err := tryConfigFile(aConfFile); err == nil {
+			confFilePath := pathutil.ExpandPath(aConfFilePath)
+			if err := tryConfigFile(confFilePath); err == nil {
 				configRead = true
 				return nil
 			} else {
