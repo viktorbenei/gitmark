@@ -8,6 +8,7 @@ import (
 	"github.com/viktorbenei/gitmark/pathutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -117,6 +118,12 @@ func runAdd(cmd *Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	// absolute local path
+	repoLocalPath, err = filepath.Abs(repoLocalPath)
+	if err != nil {
+		return err
+	}
+	repoLocalPath = filepath.Clean(repoLocalPath)
 
 	fmt.Println("--- Adding:")
 	fmt.Println("Repository.URL:", repoUrl)
