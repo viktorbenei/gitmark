@@ -25,6 +25,7 @@ Gomake / gorelease
 //- check: uncommited changes
 //- scan: search for local git repo folders + option: save into gitmarkrc if not yet saved
 //- open: open the repository with a specified command (os/exec)
+- store absolute path in gitmarkrc, even if a relative path was provided during "add"
 - add: w/ a step-by-step guide, input from user, similar to SourceTree
 - add v2: 2 modes, 1) add local working copy 2) clone a repo
 - check: git fetch on all, checks if pull/push (w flag)
