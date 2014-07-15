@@ -11,6 +11,7 @@ GO: Minimal Git app
 - can add new repo (clone) -> a step-by-step guide, input from user, similar to SourceTree
 - fetch all -> list repos with changes
 - 'open'/'goto' -> cd into the dir
+- handle if a repo was deleted by the user (don't fail)
 
 
 Gomake / gorelease
